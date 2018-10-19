@@ -1,7 +1,8 @@
 # deepspeech.pytorch
 
-Implementation of DeepSpeech2 using [Baidu Warp-CTC](https://github.com/baidu-research/warp-ctc).
-Creates a network based on the [DeepSpeech2](http://arxiv.org/pdf/1512.02595v1.pdf) architecture, trained with the CTC activation function.
+Implementation of DeepSpeech2 using Pytorch 1.0 CTC Loss
+Forked from the amazing Sean Naren's pytorch port, creates a network based on the [DeepSpeech2](http://arxiv.org/pdf/1512.02595v1.pdf) architecture, trained with the CTC activation function.
+The only changes (currently) are use of the native CTC loss function in pytorch 1.0
 
 ## Features
 
@@ -19,18 +20,6 @@ Several libraries are needed to be installed for training to work. I will assume
 an Anaconda installation on Ubuntu.
 
 Install [PyTorch](https://github.com/pytorch/pytorch#installation) if you haven't already.
-
-Install this fork for Warp-CTC bindings:
-```
-git clone https://github.com/SeanNaren/warp-ctc.git
-cd warp-ctc
-mkdir build; cd build
-cmake ..
-make
-export CUDA_HOME="/usr/local/cuda"
-cd ../pytorch_binding
-python setup.py install
-```
 
 Install pytorch audio:
 ```
@@ -314,4 +303,4 @@ Pre-trained models can be found under releases [here](https://github.com/SeanNar
 
 ## Acknowledgements
 
-Thanks to [Egor](https://github.com/EgorLakomkin) and [Ryan](https://github.com/ryanleary) for their contributions!
+Thanks to [Sean](https://github.com/SeanNaren) for his contributions!
