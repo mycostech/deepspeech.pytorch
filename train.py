@@ -6,7 +6,7 @@ import time
 import torch.distributed as dist
 import torch.utils.data.distributed
 from tqdm import tqdm
-from warpctc_pytorch import CTCLoss
+from torch.nn import CTCLoss
 
 from data.data_loader import AudioDataLoader, SpectrogramDataset, BucketingSampler, DistributedBucketingSampler
 from data.utils import reduce_tensor
@@ -197,7 +197,7 @@ if __name__ == '__main__':
         parameters = model.parameters()
         optimizer = torch.optim.SGD(parameters, lr=args.lr,
                                     momentum=args.momentum, nesterov=True)
-    criterion = CTCLoss()
+    criterion = CTCLoss(reduction='sum')
     decoder = GreedyDecoder(labels)
     train_dataset = SpectrogramDataset(audio_conf=audio_conf, manifest_filepath=args.train_manifest, labels=labels,
                                        normalize=True, augment=args.augment)
@@ -247,6 +247,8 @@ if __name__ == '__main__':
 
             out, output_sizes = model(inputs, input_sizes)
             out = out.transpose(0, 1)  # TxNxH
+
+            out = out.log_softmax(2), requires_grad_()
 
             loss = criterion(out, targets, output_sizes, target_sizes)
             loss = loss / inputs.size(0)  # average the loss by minibatch
